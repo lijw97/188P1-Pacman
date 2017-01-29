@@ -110,7 +110,6 @@ def breadthFirstSearch(problem):
     fringe.push((problem.getStartState(), []))
     while (not fringe.isEmpty()):
         currentState, currentPath = fringe.pop()
-        print currentState
         if (problem.isGoalState(currentState)):
             return currentPath
         else:
