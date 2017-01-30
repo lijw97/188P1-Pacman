@@ -509,12 +509,23 @@ def foodHeuristic(state, problem):
     #     currPosition = foodPositions[closestFood]
     #     foodPositions.pop(closestFood)
     # return heuristic
-    min = mazeDistance1(position, foodPositions[0], problem)
-    for food in foodPositions[1:]:
-        cost = mazeDistance1(position, food, problem)
-        if (cost < min):
-            min = cost
-    return min
+    # walls1 = problem.walls
+    # min = mazeDistance1(position, foodPositions[0], problem, walls1)
+    # for food in foodPositions[1:]:
+    #     cost = mazeDistance1(position, food, problem, walls1)
+    #     if (cost < min):
+    #         min = cost
+    max = 0
+    foodCount = state[1].count()
+    if (foodCount == 0):
+        return 0
+    if (foodPositions != []):
+        max= abs(position[0] - foodPositions[0][0]) + abs(position[1] - foodPositions[0][1])
+        for food in foodPositions:
+            curr = abs(position[0] - food[0]) + abs(position[1] - food[1])
+            if (curr > max):
+                max = curr
+    return max
 
 
 class ClosestDotSearchAgent(SearchAgent):
@@ -615,7 +626,7 @@ def mazeDistance(point1, point2, gameState):
     prob = PositionSearchProblem(gameState, start=point1, goal=point2, warn=False, visualize=False)
     return len(search.bfs(prob))
 
-def mazeDistance1(point1, point2, gameState):
+def mazeDistance1(point1, point2, gameState, walls):
     """
     Returns the maze distance between any two points, using the search functions
     you have already built. The gameState can be any game state -- Pacman's
@@ -627,7 +638,6 @@ def mazeDistance1(point1, point2, gameState):
     """
     x1, y1 = point1
     x2, y2 = point2
-    walls = gameState.walls
     assert not walls[x1][y1], 'point1 is a wall: ' + str(point1)
     assert not walls[x2][y2], 'point2 is a wall: ' + str(point2)
     prob = PositionSearchProblem(gameState, start=point1, goal=point2, warn=False, visualize=False)
