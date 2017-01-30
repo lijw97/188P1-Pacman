@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -489,42 +489,21 @@ def foodHeuristic(state, problem):
     currPosition = (state[0][0], state[0][1])
     foodPositions = foodGrid.asList()
     count = 0
-    # for x in foodGrid:
-    #         for y in range(0, len(x)):
-    #             if (x[y]):
-    #                 foodPositions += [(count, y)]
-    #         count += 1
-    # while (not foodPositions == []):
-    #     firstPosition = foodPositions[0]
-    #     min = abs(currPosition[0] - firstPosition[0]) + abs(currPosition[1] - firstPosition[1])
-    #     closestFood = 0
-    #     count = 0
-    #     for food in foodPositions:
-    #         currCost = abs(currPosition[0] - food[0]) + abs(currPosition[1] - food[1])
-    #         if (currCost < min):
-    #             min = currCost
-    #             closestFood = count
-    #         count += 1
-    #     heuristic += min
-    #     currPosition = foodPositions[closestFood]
-    #     foodPositions.pop(closestFood)
-    # return heuristic
-    # walls1 = problem.walls
-    # min = mazeDistance1(position, foodPositions[0], problem, walls1)
-    # for food in foodPositions[1:]:
-    #     cost = mazeDistance1(position, food, problem, walls1)
-    #     if (cost < min):
-    #         min = cost
+    min_position = 9999999999
     max = 0
+    min = 99999999999
     foodCount = state[1].count()
     if (foodCount == 0):
         return 0
     if (foodPositions != []):
-        max= abs(position[0] - foodPositions[0][0]) + abs(position[1] - foodPositions[0][1])
-        for food in foodPositions:
-            curr = abs(position[0] - food[0]) + abs(position[1] - food[1])
-            if (curr > max):
-                max = curr
+
+        copyFoodPositions = foodPositions[:]
+
+        for food in copyFoodPositions:
+            val = mazeDistance(food, position, problem.startingGameState)
+            if val > max:
+                max = val
+
     return max
 
 
@@ -640,5 +619,5 @@ def mazeDistance1(point1, point2, gameState, walls):
     x2, y2 = point2
     assert not walls[x1][y1], 'point1 is a wall: ' + str(point1)
     assert not walls[x2][y2], 'point2 is a wall: ' + str(point2)
-    prob = PositionSearchProblem(gameState, start=point1, goal=point2, warn=False, visualize=False)
+    prob = PositionSearchProblem(gameState)
     return len(search.bfs(prob))
